@@ -105,4 +105,5 @@ dist
 
 # Database
 
-db.sqlite
+dev.sqlite3
+test.sqlite3

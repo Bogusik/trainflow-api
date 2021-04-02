@@ -1,34 +1,10 @@
-const { Sequelize } = require('sequelize');
-const user = require('./models/user.model');
-
-let db;
+const client = require('knex');
+const configurations = require('./conf');
 
 if (process.env.ENV === 'prod') {
-  db = new Sequelize(
-    process.env.DB_NAME || 'postgres',
-    process.env.DB_USER || 'postgres',
-    process.env.DB_PASS || 'postgres',
-    {
-      host: process.env.DB_HOST || 'postgres',
-      port: process.env.DB_PORT || 5432,
-      dialect: 'postgres',
-      logging: false,
-    },
-  );
+  module.exports = client(configurations.production);
+} else if (process.env.ENV === 'dev') {
+  module.exports = client(configurations.development);
 } else {
-  db = new Sequelize({
-    dialect: 'sqlite',
-    storage: 'db.sqlite',
-    omitNull: false,
-    logging: false,
-  });
+  module.exports = client(configurations.test);
 }
-
-const modelDefiners = [user];
-
-/* eslint-disable-next-line */
-for (const modelDefiner of modelDefiners) {
-  modelDefiner(db);
-}
-
-module.exports = db;

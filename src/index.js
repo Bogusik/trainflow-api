@@ -9,31 +9,6 @@ try {
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const db = require('./db');
-
-async function connectToDb() {
-  // Connect to db
-  try {
-    await db.authenticate();
-    console.log('Successfully connected to database.');
-  } catch {
-    console.log('Failed to connect.');
-  }
-
-  // Sync db
-  try {
-    if (process.env.ENV === 'dev' || process.env.ENV === 'prod') {
-      await db.sync();
-    } else {
-      await db.sync({ force: true });
-    }
-    console.log('Successfully synced database.');
-  } catch {
-    console.log('Cannot perform syncing.');
-  }
-}
-
-connectToDb();
 
 const authToken = require('./middleware/tokenVerification');
 
